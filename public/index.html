@@ -29,6 +29,7 @@
     <section>
         <h2>Login</h2>
         <form action="/login" method="post">
+            <p id="error-msg" style="color:red;"></p>
             <label for="login-email">Email:</label>
             <input type="text" id="login-email" name="email" required /><br> />
 
@@ -38,5 +39,11 @@
             <button type="submit">log in</button>
         </form>
     </section>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('error') === 'invalid') {
+          document.getElementById('error-msg').textContent = 'Invalid email or password';
+        }
+      </script>
 </body>
 </html>
