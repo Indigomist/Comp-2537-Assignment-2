@@ -1,0 +1,28 @@
+# Node.js dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+jspm_packages/
+
+# Build output
+/dist
+/build
+
+# Environment variables file (sensitive info)
+.env
+
+# IDE/editor directories (VS Code, etc.)
+.vscode/
+.idea/
+
+# OS generated files (macOS/Windows)
+.DS_Store
+Thumbs.db
+
+# MongoDB session store
+.sessions/
