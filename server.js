@@ -45,9 +45,9 @@ async function startServer() {
     app.use('/', authRoutes);
     app.use('/', membersRoute);
 
-    app.listen(PORT, () => {
-      console.log(`Server running at http://localhost:${PORT}`);
-    });
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server running on port ${PORT}`);
+      });
   } catch (err) {
     console.error('Error starting server:', err);
   }
