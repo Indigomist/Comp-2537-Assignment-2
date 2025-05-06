@@ -45,9 +45,10 @@ async function startServer() {
     app.use('/', authRoutes);
     app.use('/', membersRoute);
 
-    app.use((req, res, next) => {
-        res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
-      });
+    app.get("*", (req,res) => {
+      res.status(404);
+      res.send("Page not found - 404");
+    })
 
     app.listen(PORT, '0.0.0.0', () => {
         console.log(`Server running on port ${PORT}`);

@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
+const Joi = require('joi');
 
 // This will be injected from server.js after MongoDB connects
 let usersCollection;
@@ -13,6 +14,14 @@ function setUsersCollection(collection) {
 // POST /signup route - Register a new user
 router.post('/signup', async (req, res) => {
     const { name, email, password } = req.body;
+
+    // Validate the username with Joi
+    const schema = Joi.string().max(20).required();
+    const validationResult = schema.validate(name);
+    if (validationResult.error) {
+        return res.status(400).send('Invalid username format.');
+    }
+
 
     try {
         const existingUser = await usersCollection.findOne({ email });
