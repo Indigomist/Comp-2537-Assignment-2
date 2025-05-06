@@ -1,16 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Members area(top secret)</title>
+  <title>Members Page(top secret)</title>
 </head>
 <body>
-    <h1>Welcome to the members area!</h1>
-    <p>You are succesfully logged in.</p>
+  <h1 id="welcome">Welcome!</h1>
+  <h2>Here is your member image:</h2>
+  <img id="member-image" src="" style="width:300px;">
+  <br><a href="/logout">Logout</a>
 
-    <form action="/logout" method="get">
-        <button type="submit">Log Out</button>
-    </form>
+  <script>
+    fetch('/members-data')
+      .then(response => response.json())
+      .then(data => {
+        if (data.name && data.image) {
+          document.getElementById('welcome').textContent = `Welcome, ${data.name}`;
+          document.getElementById('member-image').src = `/images/${data.image}`;
+        }
+      })
+      .catch(err => {
+        console.error('Error loading member data:', err);
+      });
+  </script>
 </body>
 </html>
