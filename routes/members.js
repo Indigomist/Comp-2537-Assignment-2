@@ -16,6 +16,7 @@ router.get('/members', requireLogin, (req, res) => {
   const randomImage = Math.floor(Math.random() * 3) + 1;
   let imageFile = '';
 
+  // Set image filename based on random selection
   if (randomImage === 1) {
     imageFile = 'shiny_knight.png';
   } else if (randomImage === 2) {
@@ -24,13 +25,12 @@ router.get('/members', requireLogin, (req, res) => {
     imageFile = 'dark_knight.png';
   }
 
-  // Serve the members.html page and include the image
-  res.send(`
-    <h1>Welcome, ${req.session.user.name}</h1> <!-- Assuming user data is in the session -->
-    <h2>Here is your member image:</h2>
-    <img src="/images/${imageFile}" style="width:300px;">
-    <br><a href="/logout">Logout</a>
-  `);
+  // Serve the members.html page and inject the image filename into the HTML
+  res.sendFile(path.join(__dirname, '..', 'public', 'members.html'), (err) => {
+    if (err) {
+      return res.status(500).send('Error serving members page');
+    }
+  });
 });
 
 module.exports = router;
