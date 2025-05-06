@@ -12,12 +12,6 @@ function requireLogin(req, res, next) {
 
 // GET /members route - Members-only page
 router.get('/members', requireLogin, (req, res) => {
-  // Serve the members.html page only if the user is logged in
-  res.sendFile(path.join(__dirname, '..', 'public', 'members.html'));
-});
-
-  // GET /members route - Display one of three random images
-router.get('/members', requireLogin, (req, res) => {
   // Randomly choose an image (1, 2, or 3)
   const randomImage = Math.floor(Math.random() * 3) + 1;
   let imageFile = '';
@@ -30,9 +24,10 @@ router.get('/members', requireLogin, (req, res) => {
     imageFile = 'dark_knight.png';
   }
 
-  // Send HTML with the image
+  // Serve the members.html page and include the image
   res.send(`
-    <h1>Member Image ${id}</h1>
+    <h1>Welcome, ${req.session.user.name}</h1> <!-- Assuming user data is in the session -->
+    <h2>Here is your member image:</h2>
     <img src="/images/${imageFile}" style="width:300px;">
     <br><a href="/logout">Logout</a>
   `);
