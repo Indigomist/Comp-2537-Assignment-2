@@ -21,7 +21,7 @@ const { router: authRoutes, setUsersCollection } = require('./routes/auth');
 async function startServer() {
   try {
     await client.connect();
-    const db = client.db();
+    const db = client.db('Assignment1DB');
     const usersCollection = db.collection('users');
     setUsersCollection(usersCollection);
 
