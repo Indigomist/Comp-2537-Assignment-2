@@ -84,7 +84,6 @@ router.post('/login', async (req, res) => {
             role: user.role       
         };
 
-        req.session.user = { name: user.name, email: user.email };
         res.redirect('/members');
     } catch (err) {
         console.error('Login error:', err);
