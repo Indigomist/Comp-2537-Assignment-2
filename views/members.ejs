@@ -1,0 +1,44 @@
+<%- include('partials/header', { title: 'Members Area' }) %>
+
+<div class="container mt-5 text-center">
+  <h2 class="mb-4">Welcome, <%= name %>!</h2>
+
+  <div class="row g-4">
+    <!-- Column 1 -->
+    <div class="col-12 col-md-4">
+      <img
+        src="/images/shiny_knight.png"
+        alt="Shiny Knight"
+        class="img-fluid rounded shadow mx-auto d-block"
+        style="max-height: 300px; object-fit: cover;"
+      >
+    </div>
+
+    <!-- Column 2 -->
+    <div class="col-12 col-md-4">
+      <img
+        src="/images/blood_knight.png"
+        alt="Blood Knight"
+        class="img-fluid rounded shadow mx-auto d-block"
+        style="max-height: 300px; object-fit: cover;"
+      >
+    </div>
+
+    <!-- Column 3 -->
+    <div class="col-12 col-md-4">
+      <img
+        src="/images/dark_knight.png"
+        alt="Dark Knight"
+        class="img-fluid rounded shadow mx-auto d-block"
+        style="max-height: 300px; object-fit: cover;"
+      >
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+
+
+
+

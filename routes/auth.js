@@ -11,7 +11,13 @@ function setUsersCollection(collection) {
     usersCollection = collection;
 }
 
-// POST /signup route - Register a new user
+// GET /signup - Render signup page
+router.get('/signup', (req, res) => {
+    const error = req.query.error || null;
+    res.render('signup', { title: 'Sign Up', error }); // Pass the error to the view
+});
+
+// POST /signup - Register a new user
 router.post('/signup', async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -19,35 +25,64 @@ router.post('/signup', async (req, res) => {
     const schema = Joi.string().max(20).required();
     const validationResult = schema.validate(name);
     if (validationResult.error) {
-        return res.status(400).send('Invalid username format.');
+        // Redirect with error message
+        return res.redirect('/signup?error=invalid_username');
     }
-
 
     try {
         const existingUser = await usersCollection.findOne({ email });
         if (existingUser) {
-            return res.status(400).send('User already exists');
+            // Redirect with error message
+            return res.redirect('/signup?error=user_exists');
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        await usersCollection.insertOne({ name, email, password: hashedPassword });
 
-        res.redirect('/');
+        // ← Insert the new user with a default role of "user"
+        const insertResult = await usersCollection.insertOne({
+            name,
+            email,
+            password: hashedPassword,
+            role: 'user'
+        });
+
+        // Store the role in the session as well
+        req.session.user = {
+            name,
+            email,
+            role: 'user'
+        };
+
+        res.redirect('/members');
     } catch (err) {
         console.error('Signup error:', err);
         res.status(500).send('Internal Server Error');
     }
 });
 
-// POST /login route - Authenticate user and start session
+
+// GET /login - Render login page
+router.get('/login', (req, res) => {
+    const error = req.query.error || null;
+    res.render('login', { title: 'Log In', error }); // Pass the error to the view
+});
+
+// POST /login - Authenticate user and start session
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
         const user = await usersCollection.findOne({ email });
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            return res.redirect('/?error=invalid');
+            // Redirect with error message
+            return res.redirect('/login?error=invalid');
         }
+
+        req.session.user = {
+            name: user.name,
+            email: user.email,
+            role: user.role       
+        };
 
         req.session.user = { name: user.name, email: user.email };
         res.redirect('/members');
@@ -57,7 +92,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// GET /logout route - Destroy session
+// GET /logout - Destroy session
 router.get('/logout', (req, res) => {
     req.session.destroy(() => {
         res.redirect('/');

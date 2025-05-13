@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    
+    <!-- Tailwind CSS CDN Link -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- You can also add custom styles here -->
+</head>
+<body>
+    <%- include('partials/header', { title: title }) %>
+
+    <h1 class="text-4xl font-bold text-center mb-8">Welcome to the Home Page!</h1>
+
+    <!-- Centering the buttons with flexbox -->
+    <div class="flex justify-center space-x-6">
+        <!-- Login Button -->
+        <a href="/login" class="px-6 py-3 text-white bg-blue-500 hover:bg-blue-600 rounded-md shadow-md">
+            Login
+        </a>
+
+        <!-- Signup Button -->
+        <a href="/signup" class="px-6 py-3 text-white bg-green-500 hover:bg-green-600 rounded-md shadow-md">
+            Sign Up
+        </a>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>
+
