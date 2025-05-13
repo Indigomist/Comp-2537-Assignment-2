@@ -84,7 +84,12 @@ router.post('/login', async (req, res) => {
             role: user.role       
         };
 
-        res.redirect('/members');
+        if (user.role === 'admin') {
+            return res.redirect('/admin'); 
+        } else {
+            return res.redirect('/members');
+        }
+
     } catch (err) {
         console.error('Login error:', err);
         res.status(500).send('Internal Server Error');

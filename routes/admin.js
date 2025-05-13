@@ -1,29 +1,56 @@
 const express = require("express");
-const router = express.Router();
+const { ObjectId } = require("mongodb");
 const { requireAdmin } = require("./middleware");
 
-// List all users
+const router = express.Router();
+
+// Placeholder for usersCollection to be injected from server.js
+let usersCollection;
+
+function setUsersCollection(collection) {
+  usersCollection = collection;
+}
+
+// List all users (Admin Dashboard)
 router.get("/admin", requireAdmin, async (req, res) => {
-  const users = await usersCollection.find({}).toArray();
-  res.render("admin", { title: "User Management", users });
+  try {
+    const users = await usersCollection.find({}).toArray();
+    res.render("admin", { title: "User Management", users });
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
-// Promote user
+// Promote user to admin
 router.post("/admin/promote/:id", requireAdmin, async (req, res) => {
-  await usersCollection.updateOne(
-    { _id: new ObjectId(req.params.id) },
-    { $set: { role: "admin" } }
-  );
-  res.redirect("/admin");
+  try {
+    await usersCollection.updateOne(
+      { _id: new ObjectId(req.params.id) },
+      { $set: { role: "admin" } }
+    );
+    res.redirect("/admin");
+  } catch (err) {
+    console.error("Error promoting user:", err);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
-// Demote user
+// Demote user to regular
 router.post("/admin/demote/:id", requireAdmin, async (req, res) => {
-  await usersCollection.updateOne(
-    { _id: new ObjectId(req.params.id) },
-    { $set: { role: "user" } }
-  );
-  res.redirect("/admin");
+  try {
+    await usersCollection.updateOne(
+      { _id: new ObjectId(req.params.id) },
+      { $set: { role: "user" } }
+    );
+    res.redirect("/admin");
+  } catch (err) {
+    console.error("Error demoting user:", err);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
-module.exports = router;
+module.exports = {
+  router,
+  setUsersCollection
+};
